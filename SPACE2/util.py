@@ -1,6 +1,7 @@
 import numpy as np
 import numba as nb
 import pandas as pd
+import re
 from joblib import Parallel, delayed
 
 # All are north region definitions in imgt numbering
@@ -66,7 +67,8 @@ def get_antibody(text):
         line = lines[i]
         assert (line[21] == "H") or (line[21] == "L"), "Chains must be labelled H for heavy and L for light" 
         chain_term = 128 if line[21] == "L" else 0
-        number = int(line[22:26])
+        # number = int(line[22:26])
+        number = int(re.sub(r'\D', '', line[22:26]))
         if number <= 128:
             numbers[i] = number + chain_term
             x = float(line[30:38])
